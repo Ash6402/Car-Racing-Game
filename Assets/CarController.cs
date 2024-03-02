@@ -27,8 +27,6 @@ public class CarController : MonoBehaviour
     {
         float vInput = Input.GetAxis("Vertical");
         float hInput = Input.GetAxis("Horizontal");
-            // transform.position = new Vector3(transform.position.x, transform.position.y, (transform.position.z + 1));
-            // Debug.Log(rigidbody.velocity);
         float forwardSpeed = Vector3.Dot(transform.forward, rigidbody.velocity);
         float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
         float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
@@ -47,7 +45,7 @@ public class CarController : MonoBehaviour
             {
                 if (wheel.motorized)
                 {
-                    wheel.wheelCollider.motorTorque = vInput * motorTorque;
+                    wheel.wheelCollider.motorTorque = vInput * currentMotorTorque;
                 }
 
                 wheel.wheelCollider.brakeTorque = 0;
