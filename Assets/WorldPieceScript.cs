@@ -14,7 +14,7 @@ public class WorldPieceScript : MonoBehaviour
 
     void Update()
     {
-        if (car.transform.position.z - transform.position.z > 100)
+        if (car.transform.position.z - transform.position.z > 300)
         {
             Destroy(gameObject);
         }

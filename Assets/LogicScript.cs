@@ -8,7 +8,7 @@ public class LogicScript : MonoBehaviour
 
    public float getOffset()
    {
-      offset += 100;
+      offset += 400;
       return offset;
    }
 }
