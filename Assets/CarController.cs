@@ -33,7 +33,6 @@ public class CarController : MonoBehaviour
         float currentSteeringRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
         
         bool isAccelerating = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed);
-        Debug.Log(rigidbody.velocity);
 
         foreach (WheelController wheel in wheels)
         {
