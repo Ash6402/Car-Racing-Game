@@ -12,14 +12,16 @@ public class CarController : MonoBehaviour
     public float steeringRange = 30;
     public float steeringRangeAtMaxSpeed = 10;
     public WheelController[] wheels;
-
     public Rigidbody rigidbody;
+    public bool hasCrashed = false;
+    public LogicScript logicScript;
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.centerOfMass += Vector3.up * -1f;
         wheels = GetComponentsInChildren<WheelController>();
+        
     }
 
     // Update is called once per frame
@@ -31,9 +33,9 @@ public class CarController : MonoBehaviour
         float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
         float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
         float currentSteeringRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
-        
         bool isAccelerating = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed);
 
+        if (hasCrashed) return;
         foreach (WheelController wheel in wheels)
         {
             if (wheel.steerable)
@@ -43,7 +45,7 @@ public class CarController : MonoBehaviour
 
             if (isAccelerating)
             {
-                if (wheel.motorized)
+                if (wheel.motorized) 
                 {
                     wheel.wheelCollider.motorTorque = vInput * currentMotorTorque;
                 }
@@ -56,5 +58,15 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.motorTorque = 0;
             }
         }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.impulse.z > 500 || other.impulse.z < -500 || other.impulse.x > 500 || other.impulse.x < -500)
+        {
+            hasCrashed = true;
+            logicScript.GameOver();
+        }
+        
     }
 }

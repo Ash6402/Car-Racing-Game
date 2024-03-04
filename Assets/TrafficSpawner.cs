@@ -28,17 +28,18 @@ public class TrafficSpawner : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
         }
-        else
+        else 
         {
-            Spawn();
             elapsedTime = 0;
+            if (carBody.velocity.z < 10) return;
+            Spawn();
+            AdjustSpawnTime();
         }
     }
 
     public void Spawn()
     {
         GameObject car = cars[Random.Range(0, cars.Length-1)];
-        car.transform.localScale = new Vector3(4,4,4);
         float position;
         do
         {
@@ -46,7 +47,10 @@ public class TrafficSpawner : MonoBehaviour
         } while (position == previousPosition);
         Instantiate(car, new Vector3(position, 0, transform.position.z), Quaternion.identity);
         previousPosition = position;
+    }
 
+    public void AdjustSpawnTime()
+    {
         if (waitTime < 1 && carBody.velocity.z > 30) return;
         elapsedTime = 0;
         if (carBody.velocity.z > 30)
