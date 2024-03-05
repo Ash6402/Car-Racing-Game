@@ -817,6 +817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: 0
   gameOverScreen: {fileID: 623724000}
+  gameOverMsg: {fileID: 380068192}
 --- !u!1 &880473374
 GameObject:
   m_ObjectHideFlags: 0
@@ -1635,7 +1636,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '200
+  m_Text: '150
 
 '
 --- !u!222 &1597998183

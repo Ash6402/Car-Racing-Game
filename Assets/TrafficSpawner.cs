@@ -15,13 +15,14 @@ public class TrafficSpawner : MonoBehaviour
     public float fuelSpawnTime; 
     private float fuelSpawnElapsedTime = 0;
     private float elapsedTime = 0;
-    private float previousPosition = -1;
+    private int previousPosition = -1;
     private Rigidbody carBody;
-    
+    private CarController carScript;
 
     private void Start()
     {
         carBody = car.GetComponent<Rigidbody>();
+        carScript = car.GetComponent<CarController>();
     }
 
     void Update()
@@ -38,6 +39,8 @@ public class TrafficSpawner : MonoBehaviour
             Spawn();
             AdjustSpawnTime();
         }
+
+        if (carScript.fuelText.text.CompareTo("0") == 0) return;
         
         if (fuelSpawnElapsedTime < fuelSpawnTime)
         {
@@ -45,7 +48,7 @@ public class TrafficSpawner : MonoBehaviour
         }
         else
         {
-            SpawnFuel((previousPosition + 2)/spawnPoints.Length, transform.position.z);
+            SpawnFuel(spawnPoints[(int)((previousPosition + 2) % spawnPoints.Length)], transform.position.z);
             fuelSpawnElapsedTime = 0;
         }
     }
@@ -53,12 +56,13 @@ public class TrafficSpawner : MonoBehaviour
     public void Spawn()
     {
         GameObject car = cars[Random.Range(0, cars.Length-1)];
-        float position;
+        int position;
         do
         {
-            position = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            position = Random.Range(0, spawnPoints.Length);
+            
         } while (position == previousPosition);
-        Instantiate(car, new Vector3(position, 0, transform.position.z), Quaternion.identity);
+        Instantiate(car, new Vector3( spawnPoints[position], 0, transform.position.z), Quaternion.identity);
         previousPosition = position;
 
     }
@@ -79,6 +83,6 @@ public class TrafficSpawner : MonoBehaviour
 
     public void SpawnFuel(float xPosition, float zPosition)
     {
-        Instantiate(fuelCan, new Vector3(xPosition, 1, zPosition), Quaternion.identity);
+        Instantiate(fuelCan, new Vector3(xPosition, 1, zPosition), Quaternion.identity).name = "Fuel Can";
     }
 }

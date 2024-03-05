@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
@@ -36,9 +37,10 @@ public class CarController : MonoBehaviour
         float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
         float currentSteeringRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
         bool isAccelerating = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed);
+        float fuel = float.Parse(fuelText.text);
 
-        if (hasCrashed) return;
-        foreach (WheelController wheel in wheels)
+        if (hasCrashed) return; 
+            foreach (WheelController wheel in wheels)
         {
             if (wheel.steerable)
             {
@@ -60,9 +62,17 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.motorTorque = 0;
             }
 
-            if (rigidbody.velocity.z > 0)
+
+            if (rigidbody.velocity.z != 0 && fuel > 0f && vInput > 0)
             {
-                fuelText.text = (float.Parse(fuelText.text) - 0.1f).ToString();
+                fuelText.text = (fuel - 0.1f).ToString();
+            }
+
+            if (fuel < 0)
+            {
+                motorTorque = 0;
+                fuelText.text = "0";
+                logicScript.GameOver(1);
             }
         }
     }
@@ -72,8 +82,16 @@ public class CarController : MonoBehaviour
         if (other.impulse.z > 500 || other.impulse.z < -500 || other.impulse.x > 500 || other.impulse.x < -500)
         {
             hasCrashed = true;
-            logicScript.GameOver();
+            logicScript.GameOver(0);
         }
-        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "Fuel Can")
+        {
+            fuelText.text = "200";
+            Destroy(other.gameObject);
+        }
     }
 }

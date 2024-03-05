@@ -5,22 +5,17 @@ using UnityEngine;
 
 public class FuelCanScript : MonoBehaviour
 {
-    public CarController carScript;
+    public GameObject car;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        carScript = GameObject.FindGameObjectWithTag("Car").GetComponent<CarController>();
+        car = GameObject.FindGameObjectWithTag("Car");
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        carScript.fuelText.text = "200";
-        Destroy(gameObject);
+        if(car.transform.position.z - transform.position.z > 50)
+            Destroy(gameObject);
     }
 }
