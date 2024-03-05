@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.UI;
 
 public class CarController : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public class CarController : MonoBehaviour
     public Rigidbody rigidbody;
     public bool hasCrashed = false;
     public LogicScript logicScript;
-    // Start is called before the first frame update
+    public Text fuelText;
+    // Start is called before the first frame update    
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -56,6 +58,11 @@ public class CarController : MonoBehaviour
             {
                 wheel.wheelCollider.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
                 wheel.wheelCollider.motorTorque = 0;
+            }
+
+            if (rigidbody.velocity.z > 0)
+            {
+                fuelText.text = (float.Parse(fuelText.text) - 0.1f).ToString();
             }
         }
     }
