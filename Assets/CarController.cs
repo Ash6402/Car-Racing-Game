@@ -90,7 +90,7 @@ public class CarController : MonoBehaviour
     {
         if (other.gameObject.name == "Fuel Can")
         {
-            fuelText.text = "200";
+            fuelText.text = "150";
             Destroy(other.gameObject);
         }
     }
